@@ -11,9 +11,6 @@ output:
      fig_caption: yes
      keep_tex: false
      toc: false
-header-includes:
-  \usepackage{float}
-  \floatplacement{figure}{H}
 bibliography: [../refs.bib]
 abstract: |
   **Background** The risk of death declines rapidly over the first month of life. It has been theorized that the fast pace of the decline is explained by hidden population heterogeneity resulting in a mortality selection process whereby the frailest infants leave the population at the fastest rate. A competing explanation situates the rapid mortality decline on the individual level, pointing towards the risky transition of birth and the subsequent adaptation of the newborn to the unfamiliar surroundings.
@@ -34,9 +31,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   cache = FALSE,
-  dpi = 300,
-  out.width = '100%',
-  fig.align='center'
+  dpi = 300
 )
 ```
 
@@ -48,13 +43,13 @@ Populations in which members are heterogeneous concerning their risk of death ar
 
 A rich (bio)demographic literature exists for the special case of mortality selection driving the shape of the population level hazard of death over age thus explaining phenomena such as late-life mortality plateaus [e.g., @Beard1959; @Vaupel1979; @Vaupel1993; @Steinsaltz2006; @Missov2015; @Colchero2019], the adolescent "accident hump" [@Remund2015], declining mortality following surgery [@Hougaard1986] or the age pattern of early life mortality [@Vaupel1983; @Hsieh1985; @Trussell1985; @Avraam2014]. All of the aforementioned literature features frailty models as a means to formalize, understand, and estimate the impact of population heterogeneity on the age trajectory of mortality. In these models, an individual's risk of death depends on a random quantity coined *frailty* [@Vaupel1979] that, on account of being unobserved, may be thought of as hidden heterogeneity between members of a cohort. Frailty is most commonly expressed in a proportional hazards framework where the hazard of death at age $x$ of an individual with frailty $z$ is given by $h(x|z)=zh_0(x)$ and $h_0(x)$ is a *baseline hazard* shared by all members of the population. An expression for the population/marginal/unconditional hazard $\overline{h}(x)$ can be derived^[An excellent introduction to this technique can be found in @Wienke2011.] by assuming a distribution of survival times for the case where $z=1$ with corresponding hazard $h_0$ and a distribution for the frailties at age $x=0$. It is then possible to fit $\overline{h}(x)$ to observed survival times or a life table and -- given the parameters of the fit and an array of formal relationships [@Vaupel1983; @Vaupel2014] -- to determine how hidden heterogeneity acts in the population under investigation. Herein lies one central attraction of frailty models: they allow inference about population heterogeneity even if none has been observed. The quality of the inference then, of course, crucially depends on the adequacy of the assumptions going into the model.
 
-A frailty explanation for the age trajectory of mortality following birth has been put forward multiple times in the literature but never seriously followed up upon. @Vaupel1983 modeled the hazard of infant death, assuming a constant baseline hazard and multiplicative Gamma distributed frailty with unity mean and a variance of 500. Such a model implies that the majority of infants at birth are at virtually no risk of death with a small minority of critical cases^[A Gamma distribution with unity mean and variance 500 has more than 98.8 percent of its probability mass below the mean and 0.24 percent at least 100 times above.]. @Trussell1985 demonstrated how sensitive the choice of baseline hazard is when modeling infant mortality via a frailty model, with the Gompertz leading to decreasing and the Weibull to increasing individual-level risk trajectories. @Hougaard1984 hypothesized that the high mortality during the first year of life and the subsequent rapid decline might be the result of an "extreme frailty distribution" upon birth, meaning a distribution with a long right tail, and he proposed the inverse-Gamma distribution as a suitable candidate. @Hougaard1986 introduced a particularly flexible family of frailty distributions, including the Gamma, the inverse-Gaussian, and distributions derived from the positive-stable. He fitted a corresponding frailty model to data on time until death after myocardial infarct, a survival scenario not unlike the neonatal case as there is a stressor at time zero with mortality declining quickly and monotonically thereafter.
-
-Indeed the Hougaard frailty model with a Gompertz baseline hazard (see Appendix \@ref(apdx-hg) for the model specification) gives an excellent fit not only to neonatal mortality but to the entire day-to-day infant life table of the 2009--2012 U.S. birth cohort, capturing the extremely steep decrease in hazard following birth and the subsequent log-linear decline during the post-neonatal period (Figure \@ref(fig:hougaard-gompertz-fit)). While by no means a proof of the frailty hypothesis, this simple model shows that a mortality selection explanation is consistent with the dynamics of daily mortality rates observed on the population level.
-
 ```{r hougaard-gompertz-fit, fig.cap='Predicted hazard (black) vs. life table mortality rates (gray) for the 2008--2012 U.S. birth cohort. Daily mortality rates over the first 365 days of life are well described by a Gompertz baseline distribution with Hougaard distributed frailties. Via the process of mortality selection, a mixture of log-linear individual level hazards, here drawn for various levels of frailty $z$, gives rise to a population level hazard with extreme curvature on the log scale. The area of the circles is in rough proportion to the number of deaths each day.'}
 knitr::include_graphics('fig/hougaard_gompertz_fit.pdf')
 ```
+
+A frailty explanation for the age trajectory of mortality following birth has been put forward multiple times in the literature but never seriously followed up upon. @Vaupel1983 modeled the hazard of infant death, assuming a constant baseline hazard and multiplicative Gamma distributed frailty with unity mean and a variance of 500. Such a model implies that the majority of infants at birth are at virtually no risk of death with a small minority of critical cases^[A Gamma distribution with unity mean and variance 500 has more than 98.8 percent of its probability mass below the mean and 0.24 percent at least 100 times above.]. @Trussell1985 demonstrated how sensitive the choice of baseline hazard is when modeling infant mortality via a frailty model, with the Gompertz leading to decreasing and the Weibull to increasing individual-level risk trajectories. @Hougaard1984 hypothesized that the high mortality during the first year of life and the subsequent rapid decline might be the result of an "extreme frailty distribution" upon birth, meaning a distribution with a long right tail, and he proposed the inverse-Gamma distribution as a suitable candidate. @Hougaard1986 introduced a particularly flexible family of frailty distributions, including the Gamma, the inverse-Gaussian, and distributions derived from the positive-stable. He fitted a corresponding frailty model to data on time until death after myocardial infarct, a survival scenario not unlike the neonatal case as there is a stressor at time zero with mortality declining quickly and monotonically thereafter.
+
+Indeed the Hougaard frailty model with a Gompertz baseline hazard (see Appendix \@ref(apdx-hg) for the model specification) gives an excellent fit not only to neonatal mortality but to the entire day-to-day infant life table of the 2009--2012 U.S. birth cohort, capturing the extremely steep decrease in hazard following birth and the subsequent log-linear decline during the post-neonatal period (Figure \@ref(fig:hougaard-gompertz-fit)). While by no means a proof of the frailty hypothesis, this simple model shows that a mortality selection explanation is consistent with the dynamics of daily mortality rates observed on the population level.
 
 More recently, the heterogeneous frailty hypothesis was discussed by @Levitis2011 and @Levitis2013 as an alternative to evolutionary explanations for "ontogenescence," i.e., the declining hazard of death following birth observed in many species. Via simulation Levitis demonstrated how age-independent individual-level risk leads to age-dependent population mortality rates. In a further variation on the theme, @Avraam2014 captured the decline in mortality from birth to adolescence by employing a discrete frailty model with subgroups featuring either exponentially increasing or constant hazards.
 
@@ -73,6 +68,8 @@ To increase the sample size and thus the reliability of the stratum specific mor
 Following the practice of statistical offices, I compute mortality rates based on *all* registered births and deaths, including cases with missing data on key birth characteristics and unreasonable covariate combinations (e.g., extremely preterm delivery with average birth weight). While this approach challenges any causal interpretation of the determinants of neonatal death, it allows one to capture, in great detail, the observed heterogeneity giving rise to the usual population-level estimates. For this paper, it is of no concern whether the relationship between observed characteristics at birth and risk of death is causal or not as the phenomenon of interest -- mortality selection -- is induced by any mortality differential between population strata, no matter the cause.
 
 For stratification, I use the information on birth weight, age of gestation at delivery, and 5 minute Apgar score. These variables are routinely recorded upon birth and highly predictive of neonatal death [@Pollack2000; @Casey2001; @Park2018]. As the inclusion of further strata only contributes minimal additional heterogeneity compared to what is already captured by the  Apgar-birth weight-prematurity trias but considerably increases the computational demands of the model fitting procedure, I opted against it.
+
+\vspace{2cm}
 
 The variables are defined and discretized as follows:
 
@@ -165,11 +162,11 @@ $$
 N_{jk}=\begin{cases}\text{Births}_k & \text{for}\,j=1\\ \text{Births}_k-\sum^{s=j}_{s=1}D_{j=s,k} & \text{for}\,j>1\end{cases},
 $$
 
-and person-days of exposure $E_{jk}=N_{j+1,k}+a_{jk}D_{jk}$, with $a_{jk}$ as the average time of death of those dying in age interval $j$. For the first day of life I calculate $a_j$ using information on the proportion of deaths during the first hour of life while for the other days the usual mid-point assumption $a_{jk}=0.5$ is employed. I then calculate stratum specific life table death rates $m_{jk}=\frac{D_{jk}}{E_{jk}}$ for each age interval and corresponding population level death rates $\overline{m}_j=\frac{\sum_k D_{jk}}{\sum_k E_{jk}}$ and relative exposures $p_{jk} = \frac{O_{jk}}{\sum_k E_{jk}}$. These tabulated counts, exposures, rates and proportions form the basis of all subsequent analyses.
+and person-days of exposure $E_{jk}=N_{j+1,k}+a_{jk}D_{jk}$, with $a_{jk}$ as the average time of death of those dying in age interval $j$. For the first day of life I calculate $a_j$ using information on the proportion of deaths during the first hour of life while for the other days the usual mid-point assumption $a_{jk}=0.5$ is employed. I then calculate stratum specific life table death rates $m_{jk}=\frac{D_{jk}}{E_{jk}}$ for each age interval and corresponding population level death rates $\overline{m}_j=\frac{\sum_k D_{jk}}{\sum_k E_{jk}}$ and relative exposures $p_{jk} = \frac{E_{jk}}{\sum_k E_{jk}}$. These tabulated counts, exposures, rates and proportions form the basis of all subsequent analyses.
 
 ## Discrete-time life table analysis
 
-### Decomposing change in mean mortality over age
+### Decomposing change in mean mortality over age {-}
 
 Using the shorthand $\Delta f_x=f_{x+1}-f_x$ let $\Delta \overline{m}_j$ denote the change in population-level mortality from age interval $j$ to $j+1$. How much of this difference is explained by a change of the subpopulation hazards and how much due to a change in the population composition induced by mortality selection? A straightforward solution to this decomposition problem can be derived by writing $\overline{m}_j = \sum_kp_{jk}m_{jk}$ and applying the product rule for finite differences [@Boole1880] to the equivalent products $m_{jk}p_{jk}=p_{jk}m_{jk}$ yielding the two expressions
 
@@ -200,7 +197,7 @@ which when averaged give the well known Kitagawa decomposition [@Kitagawa1955],
 
 The two terms represent the change in the population mortality rate due to changes in the group-specific mortality rates and due to changing group composition. Of particular interest is the ratio $\frac{\Delta \overline{m}_j^C}{\Delta \overline{m}_j}$, which for $\Delta\overline{m}_j^C<0$ and $\Delta \overline{m}_j<0$ is the share of the decline in population mortality explained by a compositional shift of the population. If mortality selection is indeed the main driver of the age decline in mortality over the neonatal period, then the aforementioned ratio has to be greater than 0.5.
 
-### Decomposing change in mortality rate variance over age
+### Decomposing change in mortality rate variance over age {-}
 
 In addition to compounding the effect of age on the average risk of death, mortality selection can lower the variance of mortality rates across population strata as the survivors concentrate in more resilient subgroups. Alternatively, any change in population variance may result from stratum specific mortality rates converging over age. Because the variance of mortality rates across strata $k$ among the survivors in age group $j$ is the weighted average $v_j(x)=\sum_k p_{jk}s_{jk}$, with $s_{jk}=(m_{jk}-\overline{m}_{j})^2$, one can follow the same strategy as before to yield the Kitagawa-style decomposition
 
@@ -221,7 +218,7 @@ In addition to compounding the effect of age on the average risk of death, morta
 
 with $v_j^D$ denoting the change in variance due to convergence or divergence of stratum specific mortality rates over age towards the population mean and $v_j^C$ the age-decline in variance due to changing population composition, i.e., mortality selection.
 
-### Decomposing change in the ratio of mean to modal mortality over age
+### Decomposing change in the ratio of mean to modal mortality over age {-}
 
 If the distribution of death rates in a cohort of infants exhibits positive skewness, mortality selection can reduce the mean-mode ratio of this distribution by "thinning the tail," i.e., by reducing the relative proportion of very frail subpopulations. However, any such decline may also result from genuine convergence of stratum specific death rates towards the death rates of the most prevalent stratum, the modal mortality rate, formally $\mathscr{M}_j = m_{j,k=r}$ with $r$ such that $p_{j,k=r}=\text{max}(p_{j1},\ldots,p_{jK})$.
 
@@ -252,7 +249,7 @@ where $\Delta r_j^D$ captures the changing ratios of stratum specific mortality 
 
 In the following, I outline a methodology to decompose the age derivative of the population hazard of death into a "direct" component reflecting actual age-effect within the population strata, and a "compositional component" capturing the confounding effect of population heterogeneity.
 
-### Estimating stratum specific hazard and survival
+### Estimating stratum specific hazard and survival {-}
 
 Stratum specific hazards during the neonatal period are well captured by the expression
 
@@ -266,11 +263,13 @@ Stratum specific hazards during the neonatal period are well captured by the exp
 
 which can be interpreted as a Weibull hazard extended by a log-quadratic term over day of life (Appendix \@ref(apdx-quadratic-hzrd)). The curve has the advantage of being linear the log scale, thus allowing it to be fit as a generalized linear mixed/multilevel model, which greatly facilitates a stable estimation of stratum specific hazards. There are in total 252 strata in the population of newborns with each stratum $k$ marking a unique combination of "Prematurity," "Birth weight," and "Apgar score" levels. Fitting the hazard separately to each stratum will result in erratic estimates as some strata do not contain enough observations to inform the model. A solution to this problem is to fit a multilevel model where instead of estimating $\beta_{0k}, \beta_{1k}, \beta_{2k}$ directly one models the coefficient's distribution at different grouping levels.
 
-Given the observed death counts $D_{jk}$ in age group $j$ and stratum $k$ and associated person-days of exposure to risk $O_{jk}$ I fit the model
+\vspace{4cm}
+
+Given the observed death counts $D_{jk}$ in age group $j$ and stratum $k$ and associated person-days of exposure to risk $E_{jk}$ I fit the model
 
 \begin{equation}
   \begin{aligned}
-    D_{jk} &\sim \text{Pois}\left(\lambda_{jk}O_{jk}\right) \\
+    D_{jk} &\sim \text{Pois}\left(\lambda_{jk}E_{jk}\right) \\
     \lambda_{jk} &= e^{\beta_{0k} +
     \beta_{1k}\log(x_{jk}+1) +
     \beta_{2k}\log^2(x_{jk}+1)},
@@ -326,7 +325,7 @@ Treating the coefficients as realizations from a multivariate-Normal distributio
 
 I fit model \@ref(eq:themodel) as a Generalized Linear Mixed Model using the `lme4` library in `R` [@Bates2015] and use the fitted coefficients to compute stratum specific hazard trajectories and survival curves -- the basis for the Vaupel-Zhang decomposition -- using the expressions given in Appendix \@ref(apdx-vz).
 
-### Vaupel-Zhang decomposition
+### Vaupel-Zhang decomposition {-}
 
 The Vaupel-Zhang equality [@Vaupel2010a] states that in any cohort stratified by some random characteristic $K$ with initial distribution $\pi_k = P(K=k)$ the age derivative of the average hazard of death amongst the survivors at age $x$ can be written as
 
@@ -350,7 +349,7 @@ knitr::include_graphics('fig/distribution_of_risk.pdf')
 
 ## Shape and level of hazards are heterogeneous
 
-The hazard trajectories predicted by the multilevel Poisson regression model \@ref(eq:themodel) closely match the mortality rate estimates from the life table. They reflect a high degree of heterogeneity among the 252 birth weight$\times$prematurity$\times$Apgar score strata of the U.S. 2009--2012 birth cohort (Figure \@ref(fig:neonatal-hazard-trajectories)), varying both in level and shape. The heterogeneity is well illustrated by contrasting the lowest-low mortality subgroup (term-born infants with regular birth weight and an Apgar score of ten) with the highest-high mortality stratum (extremely premature infants with extremely low birth weight and an Apgar score of zero). At birth, the force of mortality ranges across five orders of magnitude with a hazard ratio roughly 244-thousand (!) between the extremes but over time hazards converge as there is a strong positive correlation between the level of the hazard at birth and the rate of mortality decline over the neonatal period. While the lowest-low mortality group features a comparatively flat hazard over age, declining by 39 percent over days 0 to 28, the hazard of the highest-high risk stratum drops by 99.8 percent over the same period. Hazard trajectories by Apgar score are stratified as expected on a low-high mortality continuum from ten to zero stretching multiple orders of magnitude within all birth weight $\times$ prematurity combinations. However, hazards by Apgar score are clustered more closely among extremely preterm infants with extremely low birth-weight compared to term-born infants of regular or high birth weight.
+The hazard trajectories predicted by the multilevel Poisson regression model \@ref(eq:themodel) closely match the mortality rate estimates from the life table. They reflect a high degree of heterogeneity among the 252 birth weight$\times$prematurity$\times$Apgar score strata of the U.S. 2009--2012 birth cohort (Figure \@ref(fig:neonatal-hazard-trajectories)), varying both in level and shape. The heterogeneity is well illustrated by contrasting the lowest-low mortality subgroup (term-born infants with regular birth weight and an Apgar score of ten) with the highest-high mortality stratum (extremely premature infants with extremely low birth weight and an Apgar score of zero). At birth, the force of mortality ranges across five orders of magnitude with a hazard ratio of roughly 244-thousand (!) between the extremes but over time hazards converge as there is a strong positive correlation between the level of the hazard at birth and the rate of mortality decline over the neonatal period. While the lowest-low mortality group features a comparatively flat hazard over age, declining by 39 percent over days 0 to 28, the hazard of the highest-high risk stratum drops by 99.8 percent over the same period. Hazard trajectories by Apgar score are stratified as expected on a low-high mortality continuum from ten to zero stretching multiple orders of magnitude within all birth weight $\times$ prematurity combinations. However, hazards by Apgar score are clustered more closely among extremely preterm infants with extremely low birth-weight compared to term-born infants of regular or high birth weight.
 
 While the hazards are heterogeneous when compared directly, the majority of newborns are born on full-term, with regular birth weight and an Apgar score of nine. Thus the majority of the birth cohort is homogeneous with respect to their hazard trajectory.
 
@@ -364,7 +363,7 @@ Population-level mortality during the first day of life is ten times higher than
 
 The results from the discrete-time life table analysis are mirrored by the Vaupel-Zhang decomposition of the hazard's rate of change at different ages. The contribution of mortality rate variance across strata to the slope in the hazard is around 23 percent at birth but merely 4.6 percent 24 hours later staying in the single digits over the remainder of the first month of life (Table \@ref(tab:tab-vaupel-zhang)).
 
-```{r counterfactual-hazards, fig.cap='Keeping the population composition fixed at the distribution observed at birth only results in a minor change of the population hazard trajectory.', out.width='50%'}
+```{r counterfactual-hazards, fig.cap='Keeping the population composition fixed at the distribution observed at birth only results in a minor change of the population hazard trajectory.'}
 knitr::include_graphics('fig/counterfactual_hazards.pdf')
 ```
 
@@ -675,6 +674,8 @@ $$
 \end{aligned}
 $$
 
+\vspace{2cm}
+
 **Proof:**
 
 Bayes Theorem gives the probability of being in stratum $k$ given survival to age $x$ as
@@ -722,6 +723,8 @@ $$
     \sum_k h(x|k)\mathrm{P}'(k|X>x).
 \end{aligned}
 $$
+
+\vspace{4cm}
 
 The second term can be manipulated to yield
 

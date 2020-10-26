@@ -11,9 +11,7 @@ output:
      keep_tex: false
      toc: false
 header-includes:
-    \usepackage[section]{placeins}
-  \usepackage{float}
-  \floatplacement{figure}{H}
+  \usepackage[section]{placeins}
 bibliography: [../refs.bib]
 abstract: |
  **Background** While there is a consensus that the risk of death follows a Gompertz law over much of the adult age span, no such agreement exists about the parametric form of mortality at the very beginning of life with most literature on the topic suggesting either an exponential or various power-law expressions.
@@ -34,9 +32,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   cache = FALSE,
-  dpi = 300,
-  out.width = '100%',
-  fig.align='center'
+  dpi = 300
 )
 ```
 
@@ -67,6 +63,8 @@ The "NCHS Cohort Linked Birth -- Infant Death Data Files" [@NCHS2016] contain a 
 I confine the analysis to the quinquennial birth cohorts 1995-1999 and 2005-2009 stratified by sex, prematurity, five-minute Apgar score [@Apgar1953], and social background of the mother. Those particular variables constitute major sources of heterogeneity in infant mortality along biological, medical, and social dimensions and are among the most reliably reported fields. In total, I analyze data on 277,004 infant deaths out of 40,727,055 births over the birth cohorts 1995--1999 and 2005--2009.
 
 Female and male infant life tables are calculated for both birth cohorts, each life table stratified by either the five minute Apgar score (an ordinal measure of an infant's vitality shortly after delivery discretized into three levels), prematurity (defined via the age of gestation upon delivery and discretized into four levels), mother's education (three levels) or mother's ethnicity (four levels). Those 56 life tables thus cover heterogeneity in the age trajectory of infant mortality across period, medical and social strata.
+
+\clearpage
 
 # Methods
 
@@ -122,6 +120,8 @@ Out of 162,541 infant deaths, 23,683 (14.5 percent) die during the first hour fo
 knitr::include_graphics('fig/fit-power-exponential-members.pdf')
 ```
 
+\clearpage
+
 ## Negative-Gompertz hazard
 
 In an early attempt to model mortality across the whole human lifespan, @Thiele1871 proposed to express the risk of death before maturity as an exponential function of age,
@@ -142,6 +142,8 @@ From this fit the parameters of $h_\text{GP}$ are recovered as $a = \exp(\beta_0
 
 The negative-Gompertz model of infant mortality is especially popular in biology due to the influential paper by @Siler1979, who included it as part of his "Competing-Risk Model for Animal Mortality." In this model, a Gompertz term with negative $b$ parameter is used "to account for the hazard due to immaturity" [@Siler1979]. For life tables of human infants and children, however, the negative-Gompertz law has long been found to provide an insufficient fit [@Thiele1871, p. 326; @Choe1981; @Gage1986].
 
+Figure \@ref(fig:fit-power-exponential-members)A clearly shows that the age trajectory of infant mortality for the 2005-2009 U.S. birth cohort deviates from a pure log-linear (i.e., exponential) form, ruling out the Gompertz hazard as a suitable model for the entire infant age range. *Yet*, a log-linear decline constitutes a near-perfect description of the mortality trajectory over the post-neonatal period (Figure \@ref(fig:fit-power-exponential-members)B). The rate of death at day 30 after birth is around 2.03 per 100,000 person-days of exposure, with a subsequent decline of about 0.93 percent per additional day of age. Remarkably these two numbers explain 97.8 percent of the total deviance in the data during the post-neonatal period. Further investigating this result, I fit negative-Gompertz and power-law hazards to the post-neonatal life tables for each of the 60 monthly U.S. birth cohorts from January 2005 to December 2009 separate by sex. In most cases, the negative-Gompertz hazard provided a closer fit to the observed post-neonatal mortality trajectory than either of the alternative two or three-parameter power-law hazards (Table \@ref(tab:lowest-deviance)).
+
 ```{r lowest-deviance}
 # tab1
 load('tab/lowest_deviance.Rdata')
@@ -156,8 +158,6 @@ tab_lowest_deviance %>%
   row_spec(0, bold = TRUE) %>%
   kable_styling()
 ```
-
-Figure \@ref(fig:fit-power-exponential-members)A clearly shows that the age trajectory of infant mortality for the 2005-2009 U.S. birth cohort deviates from a pure log-linear (i.e., exponential) form, ruling out the Gompertz hazard as a suitable model for the entire infant age range. *Yet*, a log-linear decline constitutes a near-perfect description of the mortality trajectory over the post-neonatal period (Figure \@ref(fig:fit-power-exponential-members)B). The rate of death at day 30 after birth is around 2.03 per 100,000 person-days of exposure, with a subsequent decline of about 0.93 percent per additional day of age. Remarkably these two numbers explain 97.8 percent of the total deviance in the data during the post-neonatal period. Further investigating this result, I fit negative-Gompertz and power-law hazards to the post-neonatal life tables for each of the 60 monthly U.S. birth cohorts from January 2005 to December 2009 separate by sex. In most cases, the negative-Gompertz hazard provided a closer fit to the observed post-neonatal mortality trajectory than either of the alternative two or three-parameter power-law hazards (Table \@ref(tab:lowest-deviance)).
 
 ## Power-law hazard
 
@@ -200,7 +200,11 @@ While the unity-shifted-power law fits the 2005-2009 U.S. infant life table bett
 
 ### Pareto hazard {-}
 
-In their model for the age pattern of human mortality @DeBeer2016 express the hazard of death during infancy and childhood as $h(x)=\frac{a}{c+x}$. This is the hazard function of a Pareto type II distribution [@Lomax1954; @Marshall2007, pp. 400]. Rewriting the hazard reveals a shifted-power law with exponent $-1$, scaling factor $a$ and location offset $c$,
+In their model for the age pattern of human mortality @DeBeer2016 express the hazard of death during infancy and childhood as $h(x)=\frac{a}{c+x}$. This is the hazard function of a Pareto type II distribution [@Lomax1954; @Marshall2007, pp. 400].
+
+\vspace{2cm}
+
+Rewriting the hazard reveals a shifted-power law with exponent $-1$, scaling factor $a$ and location offset $c$,
 
 $$
 h_\text{PT}(x) = a(x+c)^{-1},
@@ -306,6 +310,8 @@ Hazards are mostly proportional by ethnicity of the mother (Figure \@ref(fig:pow
 
 There are no systematic differences in the age trajectory of infant mortality between the sexes, apart from a proportionally higher hazard for males than females. Similarly, the difference between the two birth cohorts is mostly proportional, with the younger cohort having a lower intercept $\beta_0$ (Figures \@ref(fig:power-exponential-birth-condition) and \@ref(fig:power-exponential-maternal-strata)).
 
+\clearpage
+
 ```{r power-exponential-birth-condition, fig.cap='Age specific hazard of death as predicted by the power-exponential hazard contrasted with life table mortality rates by sex, birth cohort, and condition of the infant upon birth.'}
 # fig4
 knitr::include_graphics('fig/power-exponential-birth-condition.pdf')
@@ -315,6 +321,8 @@ knitr::include_graphics('fig/power-exponential-birth-condition.pdf')
 # fig5
 knitr::include_graphics('fig/power-exponential-maternal-strata.pdf')
 ```
+
+\clearpage
 
 # Interpretation of the exponential-power hazard
 

@@ -1,29 +1,69 @@
 %%% Thesis Style
 %%% Jonas Schöley
-%%% 2020-05-13
+%%% 2020-10-26
+
+%--- Documentclass -----------------------------------------------------
 
 \documentclass[10pt, twoside]{article}
 \raggedbottom
 
-%%%% font/encoding %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Font/encoding -----------------------------------------------------
 
-\usepackage[utf8]{inputenc} % .tex-file text encoding
-\usepackage[T1]{fontenc}    % vector fonts and special chars in output
+\usepackage[utf8]{inputenc}       % .tex-file text encoding
+\usepackage[T1]{fontenc}          % vector fonts and special chars in output
 \usepackage{newtxtext, newtxmath} % Times Roman font family
 
-%%%% maths %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Maths -------------------------------------------------------------
 
-\usepackage{mathrsfs} % maths script fonts
-\usepackage{amssymb}  % maths symbols
 \usepackage{amsmath}  % various maths features
+\usepackage{amssymb}  % maths symbols
+\usepackage{mathrsfs} % maths script fonts
 
-%%%% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Links -------------------------------------------------------------
 
-\usepackage{graphicx} % include external images
+\usepackage{hyperref}
+\hypersetup{
+  hidelinks=true,
+  breaklinks=true,
+  colorlinks=false,
+  pdftitle={$title$}
+}
+\urlstyle{rm}
 
-%%%% captions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Misc --------------------------------------------------------------
 
-\usepackage{float}      % captions above
+\usepackage{etoolbox}  % allows to inject commands inside environments
+%\usepackage{placeins} % control the placement of floats via \FloatBarrier
+\usepackage{float}     % control placement of floats
+\usepackage{xcolor}    % for colored links
+
+%--- Figures -----------------------------------------------------------
+
+$if(graphics)$
+
+  \usepackage{graphicx} % include external images
+  \floatplacement{figure}{H}
+
+  % generate all images so they have a width \cnstmaxfigwidth
+  % images get their normal width if they fit onto the page
+  % images are scaled down if they would overflow the margins
+  \makeatletter
+    \def\cnstmaxfigwidth{
+      \ifdim \Gin@nat@width>\linewidth
+        \linewidth
+      \else \Gin@nat@width
+      \fi
+    }
+  \makeatother
+  \let\Oldincludegraphics\includegraphics
+  \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\cnstmaxfigwidth]{#1}}
+
+  %\AfterEndEnvironment{figure}{\FloatBarrier}
+
+$endif$
+
+%--- Captions ----------------------------------------------------------
+
 \usepackage{caption}
 \DeclareCaptionLabelSeparator{capsep}{:\hspace{0.2cm}}
 \captionsetup[figure]{
@@ -50,20 +90,20 @@
 \restylefloat{table}
 \restylefloat{figure}
 
-%%%% localization %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Localization ------------------------------------------------------
 
 % babel
-\usepackage[english]{babel}         % document language/localization
-\usepackage[htt]{hyphenat}          % hyphenation rules
+\usepackage[english]{babel} % document language/localization
+\usepackage[htt]{hyphenat}  % hyphenation rules
 
-%%%% bibliography %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Bibliography ------------------------------------------------------
 
 \usepackage{natbib}
 \setcitestyle{aysep={}}
 \bibliographystyle{abbrvnat}
-\newcommand{\doi}[1]{\href{http://www.dx.doi.org/#1}{\textcolor{blue}{doi:#1}}}
+\newcommand{\doi}[1]{\href{http://www.dx.doi.org/#1}{doi:#1}}
 
-%%%% layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- General layout ----------------------------------------------------
 
 \usepackage{geometry}
 \geometry{
@@ -83,7 +123,6 @@
 \setlength{\parskip}{0.5ex}
 \setlength{\parindent}{0cm}
 \setlength{\bibsep}{.18cm}
-%\renewcommand{\baselinestretch}{1.2}
 
 % no page numbers
 \pagenumbering{gobble}
@@ -98,16 +137,17 @@
 % don't hyphenate across pages
 \brokenpenalty10000\relax
 
+% increase fraction of page that can be used by floats
+% before a pure float-page is created
+\renewcommand{\floatpagefraction}{.8}
+
+%--- Lists -------------------------------------------------------------
+
 % tight lists
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-% code listings
-$if(highlighting-macros)$
-$highlighting-macros$
-$endif$
-
-%%%% sections %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Sections ----------------------------------------------------------
 
 % depth of table of content
 $if(toc_depth)$
@@ -132,22 +172,18 @@ $endif$
 \titleformat{\subsection}[hang]{\raggedright\normalfont\bfseries}{\thesubsection}{1ex}{}
 \titleformat{\subsubsection}[hang]{\raggedright\normalfont\bfseries}{\thesubsubsection}{1ex}{}
 
-%%%%% footnotes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Footnotes ---------------------------------------------------------
 
-% Footnotes
 \usepackage[bottom]{footmisc}
-\setlength{\footnotemargin}{0.6em}
 
-% if you have code in your footnotes, the million macro march
-% kind of bumps into itself.
-% Pandoc, having just rendered your text into LaTeX,
-% knows whether the 'variable' `verbatim-in-note` is True, and
-% If it is, it asks for a  LaTeX package that solves the dilemma:
-$if(verbatim-in-note)$
-\usepackage{fancyvrb}
-$endif$
+% make linebreaks start under footnote label
+\setlength{\footnotemargin}{0.3em}
 
-%%%% tables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\let\oldfootnote\footnote
+\renewcommand\footnote[1]{%
+\oldfootnote{\hspace{0.6mm}#1}}
+
+%--- Tables ------------------------------------------------------------
 
 $if(tables)$
   \usepackage{array,longtable,booktabs,multirow}
@@ -158,39 +194,29 @@ $if(tables)$
   \AtBeginEnvironment{tabular}{\scriptsize}
 $endif$
 
-%%%% subscripts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Code listings -----------------------------------------------------
+
+$if(highlighting-macros)$
+  $highlighting-macros$
+  \DefineVerbatimEnvironment{Highlighting}{Verbatim}{
+    numbers=left,fontsize=\footnotesize,commandchars=\\\{\}
+  }
+$endif$
+
+%--- Subscripts --------------------------------------------------------
 
 $if(subscript)$
   \newcommand{\textsubscr}[1]{\ensuremath{_{\scriptsize\textrm{#1}}}}
 $endif$
 
-%%%% links %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\usepackage{hyperref}
-\hypersetup{
-  hidelinks,
-  breaklinks=true,
-  pdftitle={$title$}
-}
-
-%%%% misc %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% for colored links
-\usepackage{xcolor}
-
-% Footnotes:
-$if(verbatim-in-note)$
-  \VerbatimFootnotes % -- allows verbatim text in footnotes
-$endif$
-
-%%%% includes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Includes ----------------------------------------------------------
 
 % header_includes
 $for(header-includes)$
   $header-includes$
 $endfor$
 
-%%%% title, authors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Title, authors ----------------------------------------------------
 
 $if(title)$
   \title{\large\textbf{$title$}\vskip 0em}
@@ -200,7 +226,7 @@ $if(author)$
 $endif$
 \date{\vspace{-5ex}}
 
-%%%% document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--- Print main text ---------------------------------------------------
 
 \begin{document}
 

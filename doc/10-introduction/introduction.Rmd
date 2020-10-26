@@ -6,11 +6,7 @@ output:
      fig_caption: yes
      keep_tex: false
      toc: false
-header-includes:
-  \usepackage{float}
-  \floatplacement{figure}{H}
 bibliography: [../refs.bib]
-toc_depth: 1
 ---
 
 ```{r setup, include=FALSE}
@@ -19,9 +15,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   cache = FALSE,
-  dpi = 300,
-  out.width = '100%',
-  fig.align='center'
+  dpi = 300
 )
 ```
 
@@ -139,6 +133,8 @@ The analysis of mortality during the period surrounding birth in paper three nec
 
 While the calculation of (increment-decrement) cohort life tables from individual-level data is straightforward, it may become quite a memory-intensive operation if the usual approach of episode splitting is employed whereby the size of the whole data set of individual-level observations is multiplied by the number of age groups $j$ before the aggregation takes place. To speed up the aggregation process, I have implemented an algorithm that does not necessitate any episode splitting: `nosplit` aggregates individual level transitions between multiple states into state-specific transition counts, risk populations, and exposure times allowing for arbitrarily defined age groups. The code is reproduced in the appendix of the third paper.
 
+\vspace{2cm}
+
 ### Survival analysis via Poisson regression {-}
 
 For estimation and inference, one may assume that the age and stratum specific fetal and infant death counts $D_{jk}$ given exposure times $E_{jk}$ are realizations from the Poisson distribution
@@ -181,7 +177,7 @@ $$
 h(x) = \sum_k h(x|k)\mathrm{P}(k|X>x),
 $$
 
-which yields the Vaupel-Zhang equality [Vaupel2010a],
+which yields the Vaupel-Zhang equality [@Vaupel2010a],
 
 $$
 \dot{\overline{h}}(x) = \overline{\dot{h}}(x) - \sigma_h^2(x),
@@ -198,6 +194,8 @@ h(x|z) = z h_0(x),
 $$
 
 where $h_0(x)$ is the *baseline hazard* common to all cohort members, and $z$ is the realization of a continuous, strictly positive random variable $Z$ called *frailty* and thus varies between individuals.
+
+\vspace{4cm}
 
 Integrating with respect to age yields the conditional cumulative hazard
 
@@ -227,7 +225,7 @@ $$
 
 a connection, which simplifies the construction of frailty models from distributions with known Laplace transform.
 
-Placing distributional assumptions on $H_0$ and $f_Z$ then yield an expression for $S(x)$, and, via the survival identities, $h(x)$, which can be fitted to the cohort level data. Different measures of population heterogeneity may then be derived from that fit, such as the variance of $f_Z$.
+Placing distributional assumptions on $H_0$ and $f_Z$ then yield an expression for $S(x)$, and, via the survival identities, $h(x)$, which can be fitted to the cohort level data. Different measures of population heterogeneity may then be derived from that fit, such as the variance of $Z$.
 
 Applied to the study of ontogenescence, frailty models allow quantifying the amount of heterogeneity and mortality selection needed to reproduce the observed cohort level survival pattern, given that the distributional assumptions are correct. In papers one and two, I evaluate the capability of frailty models to reproduce the observed pattern of ontogenescence in cohorts of U.S. born infants and discuss the implications of that fit for the mortality selection hypothesis.
 
@@ -271,7 +269,7 @@ The family contains many of the distributions that have previously been used in 
 knitr::include_graphics('fig/power-exponential-family.pdf')
 ```
 
-Testing the power-exponential hazard across a range of populations, I find strong evidence for the exponential tail behavior (Figure \@ref(power-exponential-maternal-strata)). Such a pattern is consistent with the hypothesis of mortality selection under acquired robustness on the individual level: While mortality rates for each individual decline exponentially over time due to the continuous adaptation of the organisms to the extrauterine environment, the *level* of mortality varies proportionally between individuals according to some "frailty" distribution. Thus, the initial power-law decline in the risk of death shortly after birth is a population-level phenomenon induced by the early death of extremely frail newborns, while the effect of acquired robustness on the individual level can be seen in the more homogeneous population of infants that survived into the postneonatal period. Simply put, the steeper the mortality decline over the first few days of life as measured by the power parameter $p$, the more heterogeneous the population of infants is at birth.
+Testing the power-exponential hazard across a range of populations, I find strong evidence for the exponential tail behavior (Figure \@ref(fig:power-exponential-maternal-strata)). Such a pattern is consistent with the hypothesis of mortality selection under acquired robustness on the individual level: While mortality rates for each individual decline exponentially over time due to the continuous adaptation of the organisms to the extrauterine environment, the *level* of mortality varies proportionally between individuals according to some "frailty" distribution. Thus, the initial power-law decline in the risk of death shortly after birth is a population-level phenomenon induced by the early death of extremely frail newborns, while the effect of acquired robustness on the individual level can be seen in the more homogeneous population of infants that survived into the postneonatal period. Simply put, the steeper the mortality decline over the first few days of life as measured by the power parameter $p$, the more heterogeneous the population of infants is at birth.
 
 ```{r power-exponential-maternal-strata, fig.cap='Patterns of ontogenescence are well described by the power-exponential family of probability distributions.'}
 knitr::include_graphics('fig/power-exponential-maternal-strata.pdf')
@@ -295,15 +293,17 @@ The last point is crucial concerning any investigation into ontogenescence: Quit
 
 Thus, deciding which process actually gives rise to the remarkably regular and simple pattern of ontogenescence requires different inference strategies. This realization is the origin of papers two and three of this thesis, the former facing the mortality selection hypothesis head-on by estimating the observed distribution of risk in a population of newborns and the latter addressing the transitional timing hypothesis by looking what "mark" the event of birth leaves on a cohort as they transition into life.
 
+\vspace{4cm}
+
 ## Paper 2: The impact of population heterogeneity on the age trajectory of neonatal mortality
 
 How much of the observed population-level decline in the hazard of death throughout the first month of life arises from individual-level ontogenescence, and how much is due to population heterogeneity? The answer to this question directly addresses the *mortality selection* hypothesis of ontogenesis, and it requires some knowledge about the individuals in a population.
 
 The hazard of death for an individual at some point in time is always a latent variable, as it can not be measured directly. A person is either alive or dead, and the risk to move from one state to the other must be estimated via some model. One ingenious approach to this modeling problem is to assume some functional form for the individual level hazard trajectory and some family of distributions for the distribution of risks between individuals and then, putting the strong assumptions to work, infer the most likely individual level hazard trajectory from the observed distribution of lifetimes in a cohort. These frailty models allow maximum inference from minimal data via a multitude of assumptions, which has lead to some skepticism regarding their usefulness regarding the test of hypothesis involving population heterogeneity:
 
-> *"Individual random effects (frailties), whenever detected, can be made to disappear by elementary model transformation. In consequence, unless we are to take some model form as unassailable, beyond challenge and carved in stone, and if we are to understand the term 'frailty' as referring to individual random effects, then frailty models have no value."* [@OQuigley2002]
+> "Individual random effects (frailties), whenever detected, can be made to disappear by elementary model transformation. In consequence, unless we are to take some model form as unassailable, beyond challenge and carved in stone, and if we are to understand the term 'frailty' as referring to individual random effects, then frailty models have no value." [@OQuigley2002]
 
-> *"The statistician who chooses $S(t|X, Z)$ will conclude that heterogeneity is clearly evident. The statistician who decides for $S(t|X)$ will come to the opposite conclusion."* [@Wienke2011]
+> "The statistician who chooses $S(t|X, Z)$ will conclude that heterogeneity is clearly evident. The statistician who decides for $S(t|X)$ will come to the opposite conclusion." [@Wienke2011]
 
 To circumvent the identifiability issues, I turn the frailty modeling framework on its head: Instead of asking how much unobserved heterogeneity would be needed to produce an observed population hazard, I ask how much of the curvature of the observed population hazard is explained by the heterogeneity we can actually observe in the population.
 
@@ -344,15 +344,19 @@ Using U.S. data on fetuses conceived in 2009, I found that the transition of bir
 3. the changing likelihood of live birth over the length of a pregnancy, and
 4. the sudden decline in mortality in the days following birth.
 
+\clearpage
+
+```{r perinatal-hazards, fig.cap='Age trajectories of feto-infant survival A) by sex for the U.S. conception cohort 2009, B) by U.S. conception cohort, C) by maternal origin for the U.S. conception cohort 2009. Fitted (lines) versus life table estimates (points).'}
+knitr::include_graphics('fig/perinatal-hazards.pdf')
+```
+
+\clearpage
+
 As a summary measure of feto-infant mortality over gestational age, I propose the probability of a fetus alive at week 24 to die within the next year. While the incidence of adverse pregnancy outcomes as measured by this indicator has fallen from 1989 to 1999, and again to 2009, any lower limit is far away: out of 100,000 fetuses of African-American origin, one in 71--75 die within one year of fetal viability, roughly twice as many as observed in cohorts of Hispanic or White origin (Figure \@ref(fig:perinatal-hazards)C). Pronounced differences in the magnitude of the "birth hump," as it turns out, have only a minor effect on the probability of post-viability survival.
 
 As an indicator of adverse pregnancy outcomes, the probability of death within a year following fetal viability is quite sensitive and, unlike the well-known perinatal mortality rate, embedded in a survival analysis framework. As concluded in paper 3:
 
 > "Would pregnancy come with the same warnings as prescription drugs, feto-infant death past the age of fetal viability would have to be labeled as a 'common' side effect according to the standards put forth in @CIOMSWGIIIV1999."
-
-```{r perinatal-hazards, fig.cap='Age trajectories of feto-infant survival A) by sex for the U.S. conception cohort 2009, B) by U.S. conception cohort, C) by maternal origin for the U.S. conception cohort 2009. Fitted (lines) versus life table estimates (points).'}
-knitr::include_graphics('fig/perinatal-hazards.pdf')
-```
 
 \clearpage
 
