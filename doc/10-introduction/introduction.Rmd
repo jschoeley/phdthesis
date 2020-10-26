@@ -1,0 +1,381 @@
+---
+output:
+  bookdown::pdf_book:
+     template: ../thesis_style.tex
+     citation_package: natbib
+     fig_caption: yes
+     keep_tex: false
+     toc: false
+header-includes:
+  \usepackage{float}
+  \floatplacement{figure}{H}
+bibliography: [../refs.bib]
+toc_depth: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  dpi = 300,
+  out.width = '100%',
+  fig.align='center'
+)
+```
+
+# Introduction and research questions
+
+Making our way into this world, we face a string of challenges: the conceptus must implant in the uterus and within the next nine months develop into a fetus strong enough to survive the struggle of birth and the separation from the mother's organism. Having made this transition, the newborn's resilience against death continues to be tested: it needs to learn to fight infections, to digest food, and to communicate basic needs while remaining entirely dependent on appropriate care. But each challenge overcome is rewarded by a better prospect of future survival. From conception until maturity, the hazard of death declines continuously -- only disrupted by the event of birth. While human life has famously been characterized as a *"being-toward-death"* [@Heidegger1962], the situation initially is reversed: With each additional day of survival, the child moves further away from death.
+
+The phenomenon of declining rates of mortality between conception and maturity has been coined *"ontogenescence"* [@Levitis2011]^[The word is a combination of *ontogenesis*, i.e., the development of an individual organism, and *senescence*, i.e., deterioration with age.]. This thesis concerns its quantification.
+
+The changing risk of death early in life has been an object of study long before the phenomenon was honored with a neologism. Motivated by the prospect of formulating a "law" of mortality across the whole life, actuaries began to include data on death during infancy and childhood into their graduation efforts [@Oppermann1870; @Thiele1871; @Wittstein1883; @Steffensen1930; @Harper1936]. The method of fitting curves to infant life tables was creatively employed by @Bourgeois-Pichat1951, who estimated the number of infant deaths due to exogenous versus endogenous causes from the age distribution of deaths alone. While the universality of the relationship uncovered by Bourgeois-Pichat has been questioned, his method continues to be used in historical demography contexts where data are scarce [@Knodel1977; @Wrigley1997; @Galley1999]. Other demographic applications that rely on some measure of ontogenescence are life expectancy calculations, which require data on the exact timing of infant death within the first year of life [@Chiang1979], and the monitoring of the continued progress towards lower infant and childhood mortality, where knowledge about the age pattern of mortality acts as a check on data quality, aids in forecasting and provides insight into the specific groups that need to be targeted for further progress [@Mahy2003; @Rao2011; @Guillot2012; @MejiaGuevara2019].
+
+The study of fetal and infant mortality over the so-called "gestational age," the approximate time since conception, is a prime concern of perinatal epidemiology. Here the phenomenon of ontogenescence is twofold as it describes both the decline of the risk of fetal death throughout pregnancy and the decline in infant mortality following birth. The relevance of both gestational and chronological age when it comes to the survival prospects of a newborn child and the obstetric balancing act between stillbirth and neonatal death [@Trudell2014] informs questions about the optimal timing of delivery and has lead to a range of indicators of perinatal mortality [@Yudkin1987; @Feldman1992; @Platt2004; @Joseph2007]. The importance of studying the measurement of ontogenescence is reflected in the extensive debates about the best way to estimate the changing risk of fetal death over the course of a pregnancy [@Smith2005; @Joseph2004; @Joseph2017].
+
+*What drives ontogenescence?*
+
+The realization that ontogenescence occurs in many species has led to speculation regarding its evolutionary roots. @Hamilton1966 argued that the concentration of deaths early in life (or even before birth) is "advantageous" as it increases the time that the parents have to "replace" the lost offspring and decreases the parental resources spent on what ultimately will have been a failed attempt at reproduction. Various authors have refined this argument without, however, explaining why ontogenescence continues to be observed in some species long after the offspring becomes fully independent from the parents [@Levitis2011]. A proposed evolutionary trade-off between the current rate of growth and the current survival of an organism solves this paradox: Juvenile organisms who invest in fast-growth momentarily worsen their survival chances with the prospect of increasing their adult survival once they have grown large [@Chu2008].
+
+Ontogenescence and the growth of an organism can, of course, be linked without invoking the theory of evolution. A striking example of size-dependent mortality is given with the palm tree *Euterpe globosa*: Out of 1,000 seeds, most will fail to germinate, and only one will have survived the ten years it takes to develop into a young tree. In order to mature, the young tree again has to beat the odds of 1000:1, but once aged 60 years, and grown to a height of 20 meters, mortality remains at an exceptionally low level [@Valen1975; discussed in @Berrut2016]. @Levitis2011 summarizes hypothesis linking an organism's growth and maturity to its survival prospects under the term *acquired robustness*, a concept reflected in the parametric mortality models by @Siler1979^[*"While the most common use of this decreasing hazard would be to account for the hazard due to immaturity, it can also be used [...] for other hazards to which an animal adjusts successfully"* @Siler1979.], @Heligman1980^[*"C measures the rate of mortality decline in childhood (the rate at which a child adapts to its environment"* @Heligman1980.] and @Bourgeois-Pichat1951^[He proposed an expression linking his mortality curve to infant growth curves [via @Woods2009, p. 40f.].].
+
+Increasing robustness can hardly explain the drastic shift in the risk of death over the first hours and days of an infant's life. Taking into account the event of birth itself leads to the *transitional timing* hypothesis, which states that risky physiological and environmental transitions tend to be concentrated early in life, thus increasing early mortality [@Levitis2011].
+
+While the aforementioned hypotheses imply that not only cohorts but also individuals are subject to ontogenescence, this need not be the case when *mortality selection* is considered: Even if mortality for individuals is constant over age, one would observe an age-decline in aggregate death rates given heterogeneous mortality levels among population subgroups. Over time, the proportion of the group with lower mortality would rise, thus lowering population average mortality. Here we connect back to demographic theory, which offers methods of quantifying this discrepancy between individual and population-level mortality [@Vaupel1979; Vaupel1983; @Vaupel2002; Vaupel2010a; @Steinsaltz2006; @Missov2015].
+
+This thesis concerns the description of patterns of ontogenescence in fetal and infant populations and the potential for learning about the mechanisms of ontogenescence from population data alone. Following the terminology in @Levitis2011, I will investigate ontogenescence in a large sample of births, infant and fetal deaths registered in the U.S. from 1989--2012 under three different premises: *acquired robustness*, *mortality selection*, and *transitional timing*. To that end, the following research questions are addressed:
+
+- *Paper 1. A parametric family of hazard trajectories for infant mortality:* Is it possible to find a parsimonious, well-fitting, parametric survival model that provides a mechanistic explanation for the phenomenon of ontogenescence rather than just a phenomenological description of the data?
+
+- *Paper 2. The impact of population heterogeneity on the age trajectory of neonatal mortality:* Does mortality selection explain the rapid decline in mortality following birth?
+
+- *Paper 3. The gestational age pattern of feto-infant mortality:* How does the risk of death evolve over gestational age in a cohort of fetuses transitioning into infancy?
+
+\clearpage
+
+# Data and Methods
+
+In this section, I give an overview of the data and the techniques used in the three papers constituting the core of this thesis. Readers familiar with survival analysis, mixture distributions, mortality selection, and frailty models may safely skip the methods description.
+
+## United States registry data on births, fetal and infant death
+
+The vital statistics of the United States is perhaps the most extensive publicly available data source on age trajectories of fetal and infant mortality. The "Birth Cohort Linked Birth-Infant Death Data Files" [@NCHS2016] contain most of the information available on a newborn's birth certificate and, where applicable, the death certificate starting with birth cohort 1983, whereas the "Fetal Death Data Files" [@NCHS2016b] cover all fetal deaths registered in the United States since 1982.
+
+By making use of this registry data, I can compare patterns of ontogenescence across diverse population strata, and, for example, inquire how conditions upon birth affect the subsequent mortality trajectory, or how the event of birth itself shapes ontogenescence. The public availability of the data furthermore ensures the reproducibility of my results.
+
+Despite these advantages, it is clear that the topic of ontogenescence is much broader than any single data source can capture. As stated in the first paper, and equally true for the thesis as a whole:
+
+> "[...] without further study, the results of this paper can not be generalized to populations other than present-day U.S. infants. While similar results for countries with similar overall levels of infant mortality (implying a similar level of development) are to be expected, it would be foolish to assume the same age pattern of infant mortality in pre-20th century populations or present populations suffering under a crisis: Historically the age-pattern of infant mortality was very much shaped by the interaction of seasonality effects, improper substitutes for breastfeeding, and deadly infectious diseases [@Knodel1977; @Huck1995], factors which have lost relevance in the U.S. over the course of the 20th century. Likewise, an analysis of 21st century U.S. infant mortality yields little insight into the characteristics of infant death in parts of the world suffering from humanitarian crises and violent conflicts."
+
+## Basic survival analysis {#survival}
+
+The numerous techniques employed in this thesis are unified under the label "Survival Analysis." On a technical level, survival analysis is nothing but inference about the distribution of a non-negative random variable $X$. Interpreting this variable as the "time until death" transforms simple probability calculations into statements about the survival of a cohort.
+
+The function
+
+$$
+S(x) = \mathrm{P}(X>x)
+$$
+
+is commonly called a *survival curve* and gives the probability of survival to age $x$. Conversely
+
+$$
+F(x) = 1-S(x) = \mathrm{P}(X\leq x)
+$$
+
+is the *cumulative distribution function* of lifetimes interpreted as the probability of dying before or at age $x$. The *density of deaths* is given by the derivative
+
+$$
+f(x) = \frac{\mathrm{d}F(x)}{\mathrm{d}x} = \frac{-\mathrm{d}S(x)}{\mathrm{d}x}.
+$$
+
+Much of this thesis concerns inference about the *hazard of death*, a.k.a. force of mortality, hazard function, hazard rate, defined as
+
+$$
+h(x) = \frac{f(x)}{S(x)} = \lim_{\delta \rightarrow 0}\frac{\mathrm{P}(x<X\leq x+\delta|X>x)}{\delta}.
+$$
+
+The hazard function operationalizes a particularly intriguing concept: the instantaneous risk of death among the survivors of a cohort at age $x$. Changes in this risk of death over age qualify the type of "aging" a cohort experiences. If $h(x)$ increases, the cohort experiences *senescence*, for decreasing $h(x)$, we use the term *ontogenescence*, and "constant hazards" indicate the absence of aging in a statistical sense. It is the exponential increase of $h(x)$ with age that generations of demographers, actuaries and evolutionary biologists attempted to explain; it is $h(x)$ that forms the basis for one of the most widely employed biostatistical models [@Cox1972]; it is $h(x)$ that @Vaupel1979 builds his theory of frailty upon; it is $h(x)$ which cuts across 200 years of statistical methodology from the cohort life table to the Poisson regression and the piecewise exponential survival model [@Holford1980], and it is $h(x)$ which, by definition, reflects the *dynamics of ontogenescence* in a cohort of fetuses or infants [@Levitis2011].
+
+The hazard function and the survival curve are connected via the identity
+
+$$
+S(x) = \exp\left(-\int_0^x h(s)\,\text{d}s\right),
+$$
+
+where
+
+$$
+H(x) = \int_0^x h(s)\,\text{d}s
+$$
+
+is known as the *cumulative hazard*.
+
+## Censoring and truncation
+
+In the study of fetal and infant mortality, the age at death $x$, by definition, is incompletely observed. Infants cease to be part of the sample once they survived to their first birthday, and the study of fetal death ends either with birth or with induced abortion. In both cases, observations on the age at death are *right censored*. In the infant case, the censoring is deterministic, i.e., it occurs 366 days following birth due to the study design, whereas in the fetal case, the censoring is random as both the timing of birth and of induced abortion vary from case to case. A usual assumption in survival analysis is that the age at censoring and the age at death are independent. This is clearly not the case when it comes to the study of fetal death given that fetal conditions that increase the risk of fetal death, such as congenital malformations, also increase the risk of induced abortion and early delivery. In the third paper, I discuss some of the implications of this dependence.
+
+*Interval censoring* describes a situation where the age at death is only known to fall within an interval $[x, x+\delta)$, but the exact timing is unknown. To a degree, this is always the case as the ages are only ever known up to some unit of observation, being it weeks, as in fetal mortality, or days/hours, as in infant mortality. In paper three, where the intervals are rather large relative to the total time under investigation, I take special care to account for this type of censoring.
+
+A death is said to be *left truncated* if it occurred before some truncation age, and, as a consequence, one neither learns about the death nor about the existence of the deceased subject. Left truncation is a significant challenge for the study of fetal mortality. In the U.S., most states only require the reporting of a fetal death starting at 20 weeks of gestation. This puts a lower limit on the left truncation age. In practice, however, under-registration of fetal deaths also occurs at later ages of gestation and depends on the individual circumstances of the pregnancy. Therefore the left truncation age is not well defined. In my analysis of fetal mortality, I only consider fetuses that survived until 24 weeks of gestation, limiting the influence of left truncation due to under-registration and of right censoring due to induced abortions on the estimates of fetal mortality.
+
+## Estimation of survival quantities
+
+### Cohort life tables {-}
+
+A century-old tool of demographic analysis, the *cohort life table* may be regarded as one of the first big data methods in statistics as it reduces the survival of millions of individuals down to a manageable number of cells in a table. With tens of millions of individual-level observations on fetuses and infants, such an aggregation continues to be useful, and hence I employ the cohort life table method before fitting the actual models of interest to the now aggregated data. Estimates of mortality and survival derived from the cohort life table serve as a baseline against which I compare the fit of other models.
+
+The construction of a cohort life table starts with $N$ individuals at age $x=0$, which are followed for $\omega$ units of time. The total follow up time is cut into $j=1,..., J$ age intervals $[x_j,x_j+n_j)$ of width $n_j$ and a tally is kept on the number of observed deaths $D_j$ and censorings $C_j$ within an age interval $j$, the total population at risk $N_j$ at the start of the age interval, and the total person-time lived over the age interval $E_j$. To calculate $E_j$, one can either use available information on the exact timing of censorings and deaths within an age group or assume that events occur uniformly over the interval (mid-point assumption).
+
+Availability of $D_j$ and $E_j$ allows to calculate an *occurrence-exposure rate* $m_j = \frac{D_j}{E_j}$ giving the expected number of deaths in interval $j$ per unit of person-time exposure. For a cohort of newborns, $m_j$ is the life table estimate of the age-specific infant mortality rate.
+
+By defining a piecewise constant hazard function $h(x)=m_j$ if $x_j\leq x < x_{j+1}$ the cohort life table connects back to the basic survival analysis framework outlined in section \@ref(survival). As a constant hazard function is characteristic of the exponential distribution, this model is also referred to as piecewise exponential. It is assumed that the ages at death within each age interval $j$ follow an exponential distribution with rate parameter $h(x_j)$. See @Holford1980 for the equivalence of piecewise-defined occurrence-exposure rates and a piecewise exponential survival model.
+
+The simple cohort life table may of course be stratified over any number of subpopulations simply by adding an index $k$ to the aforementioned quantities, e.g., $m_{jk}=\frac{D_{jk}} {E_{jk}}$ for the mortality rate in stratum $k$. This way one can capture "observed" heterogeneity in the risk of death between population strata. Note that the stratum specific mortality rates give rise to the overall mortality rate $m_j$ via the weighted average $m_j = \sum_k m_{jk}\pi_{jk}$, where $\pi_{jk} = \frac{E_{jk}}{\sum_k E_{jk}}$ is the stratum specific relative exposure. This relationship can be exploited to estimate the effect of mortality selection on changes in $m_j$ over age.
+
+The analysis of mortality during the period surrounding birth in paper three necessitates the distinction between fetal, neonatal, and postneonatal populations. To that end, the cohort life table can be extended such that it takes into account, for each age group $j$, the number of transitions between the fetal, neonate, post neonate states, the number of survivors and population exposures in each state, and the number of deaths from each state. This is called an *increment-decrement life table* as the risk population in state $s$, $N^s_j$, is allowed to increase as well as decrease.
+
+While the calculation of (increment-decrement) cohort life tables from individual-level data is straightforward, it may become quite a memory-intensive operation if the usual approach of episode splitting is employed whereby the size of the whole data set of individual-level observations is multiplied by the number of age groups $j$ before the aggregation takes place. To speed up the aggregation process, I have implemented an algorithm that does not necessitate any episode splitting: `nosplit` aggregates individual level transitions between multiple states into state-specific transition counts, risk populations, and exposure times allowing for arbitrarily defined age groups. The code is reproduced in the appendix of the third paper.
+
+### Survival analysis via Poisson regression {-}
+
+For estimation and inference, one may assume that the age and stratum specific fetal and infant death counts $D_{jk}$ given exposure times $E_{jk}$ are realizations from the Poisson distribution
+
+$$
+  D_{jk} \sim \text{Pois}(\lambda_{jk}E_{jk}).
+$$
+
+The rate parameter $\lambda_{jk}$ can be linked to a vector of co-variates $\mathbf{x}_{jk}'$ via
+
+$$
+\lambda_{jk} = \exp(\beta_0 + \mathbf{x}_{jk}'\boldsymbol{\beta}),
+$$
+
+ensuring that the product $\lambda_{jk}E_{jk}$ is positive. As shown by @Holford1980, $\lambda_{jk}$ can be interpreted as the value for a stratum specific piecewise constant hazard function $h_k(x)=\lambda_j$ where $x_{jk}\leq x < x_{j+1,k}$. This equivalence allows one to estimate the survival quantities introduced in section \@ref(survival) by employing the flexible and efficient apparatus of Generalized Linear Models [GLMs, @McCullagh1989], specifically, log-linear Poisson regression. Advantages of the GLM approach to survival analysis are a stable estimation of parameters without the need to specify starting values, the ability to work with pre-aggregated data which vastly reduces memory requirements and computation time, and the easy inclusion of random effects terms which I employ in paper two to estimate neonatal life tables and hazard trajectories for extremely sparse subpopulations which may only consist of a few dozen observations.
+
+The Poisson approach to survival analysis predicts a piecewise constant hazard function over age with one parameter per age group. However, large parts of demography are formulated in the continuous language of calculus and require the hazard to be differentiable. As demonstrated by, e.g., @Aitkin1980 and @Currie2016, common continuous survival distributions such as the Weibull or the Gompertz may fit within the Poisson regression framework via the inclusion of transformed age variables into the regression equation. In the first paper, I show how this technique can be extended to fit a wide range of parametric distributions to infant life tables.
+
+In the case of fetal mortality, the age intervals are wide enough as to warrant the use of an interval censored likelihood function when fitting a parametric survival model to the data. Details on this procedure are given in the appendix of paper three.
+
+## Heterogeneity, mortality selection, and Frailty models
+
+The "mortality selection" hypothesis for ontogenescence may be formalized by considering the survival curve for a cohort of infants stratified into $\kappa$ subpopulations $k=1,\ldots,\kappa$,
+
+$$
+S(x) = \mathrm{P}(X>x) = \sum_k S(x|k)\mathrm{P}(K=k),
+$$
+
+where $\mathrm{P}(K=k)$ is the probability to be born into stratum $k$, and $S(x|k)$ is the corresponding conditional survival curve.
+
+Given that $S(x|k)$ varies between strata the composition of the cohort along subgroups changes according to
+
+$$
+\mathrm{P}(k|X>x) = \frac{S(x|k)\mathrm{P}(k)} {S(x)}.
+$$
+
+Over age, the proportion of subgroups with good survival prospects will increase at the expense of subgroups with a worse outlook. This compositional shift affects the average mortality observed in the population, which will be less and less influenced by the high-mortality subgroups, due to their selective disappearance. This mechanism is evident in the age derivative of the population hazard
+
+$$
+h(x) = \sum_k h(x|k)\mathrm{P}(k|X>x),
+$$
+
+which yields the Vaupel-Zhang equality [Vaupel2010a],
+
+$$
+\dot{\overline{h}}(x) = \overline{\dot{h}}(x) - \sigma_h^2(x),
+$$
+
+stating that cohort level ontogenescence, $\dot{\overline{h}}(x)$, i.e., the derivative in the hazard over age as observed for a cohort of infants, is a function of the average ontogenescence observed over subgroups of the cohort, $\overline{\dot{h}}(x)$, *compounded by* the variance of hazard levels within the cohort, $\sigma_h^2(x)$. Even in the complete absence of ontogenescence on the individual or subpopulation level, one will observe it on the cohort level as long as the risk of death is heterogeneous.
+
+In the second paper, the expressions above are employed to, for the first time, *test* the mortality selection hypothesis of infant mortality on the grounds of actually observed population heterogeneity. See @Vaupel1983, @Vaupel2010a, @Vaupel2014, and the appendix of paper two for details and proofs regarding the stated equalities.
+
+If $h(x)$ is only observed on the population level, one may estimate the level of population heterogeneity and mortality selection via a "frailty model." @Vaupel1979 assume that each individual in a cohort is subjected to a hazard of death given by
+
+$$
+h(x|z) = z h_0(x),
+$$
+
+where $h_0(x)$ is the *baseline hazard* common to all cohort members, and $z$ is the realization of a continuous, strictly positive random variable $Z$ called *frailty* and thus varies between individuals.
+
+Integrating with respect to age yields the conditional cumulative hazard
+
+$$
+H(x|z) = zH_0(x),
+$$
+
+and corresponding conditional survival function
+
+$$
+S(x|z) = e^{-zH_0(x)}.
+$$
+
+This conditional survival function can be linked to the survival of the complete cohort by integrating over the density of $z$
+
+$$
+\begin{aligned}
+S(x) &= \int_0^\infty e^{-zH_0(x)}f_Z(z)\,\text{d}z,
+\end{aligned}
+$$
+
+which, as noted by @Hougaard1984, is the Laplace transform of $Z$ evaluated at $H_0(x)$,
+
+$$
+S(x) = \mathcal{L}_Z\{H_0(x)\},
+$$
+
+a connection, which simplifies the construction of frailty models from distributions with known Laplace transform.
+
+Placing distributional assumptions on $H_0$ and $f_Z$ then yield an expression for $S(x)$, and, via the survival identities, $h(x)$, which can be fitted to the cohort level data. Different measures of population heterogeneity may then be derived from that fit, such as the variance of $f_Z$.
+
+Applied to the study of ontogenescence, frailty models allow quantifying the amount of heterogeneity and mortality selection needed to reproduce the observed cohort level survival pattern, given that the distributional assumptions are correct. In papers one and two, I evaluate the capability of frailty models to reproduce the observed pattern of ontogenescence in cohorts of U.S. born infants and discuss the implications of that fit for the mortality selection hypothesis.
+
+## Decomposition analysis
+
+The Kitagawa decomposition [@Kitagawa1955] allows expressing differences between weighted averages in terms of differences in the weights and differences in the weighted component. In paper two, I use this method to assess how changes in the composition of a cohort of newborns over age impact the cohorts age trajectory of mortality. Additionally, I  show how changes in the distribution of mortality risk over the first few days following birth can be decomposed into a mortality convergence and a mortality selection component. In paper three, Kitagawa's method allows me to show how the hazard trajectory of a cohort of fetuses, as they pass into infancy, is shaped by compositional shifts.
+
+The Horiuchi decomposition [@Horiuchi2008] is employed in paper three to assess how the shape of the feto-infant hazard trajectory impacts the observed differences in the probability of fetal and infant death between different population strata.
+
+\clearpage
+
+# Summary of results
+
+## Paper 1: A parametric family of hazard trajectories for infant mortality
+
+Parametric probability distributions tell origin stories: The Weibull distribution of lifetimes arises whenever the failing of a "weakest link" in a chain of connected systems determines the eventual timing of death, a similar derivation holds for the Gompertz distribution, a favorite among Demographers and a standard model for human senescence. Mortality selection arises as a consequence of mixtures of distributions, such as the Gamma-Gompertz, which fits the apparent mortality deceleration at older ages, and whenever the hazard function of a distribution is represented as a sum of terms, competing risks are supposedly at work. 
+
+Three potential origins of ontogenescence are "mortality selection," "acquired robustness," and the "shock of birth." Is it possible to find a probability distribution for the age at infant death reflecting these origin stories while fitting the data well?
+
+```{r life-table-ontogen, fig.cap='Ontogenescence, as observed in the U.S. 2005-2009 birth cohort.'}
+knitr::include_graphics('fig/life-table-ontogen.pdf')
+```
+
+During the five years from 2005 to 2009, 25,143,288 births have been registered in the United States, resulting in 162,541 infant deaths. When plotted over day-of-age, the life table mortality rate estimates for this quinquennial birth cohort reveal a rather simple pattern: The relative rate of infant mortality decline is highest right after birth and over the first month of life approaches a constant value of around 0.5-1 percent per additional day of life (Figure \@ref(fig:life-table-ontogen)). Clearly, any probability distribution fitting such a pattern must feature a hazard function that smoothly transitions into an exponential tail. A convenient choice for the rapidly declining early part of the curve is a power of age as this leads to a hazard which may easily be fitted to counts of deaths within the framework of Generalized Linear Models.
+
+The power-exponential hazard family of probability distributions reflects the aforementioned features of age-specific infant mortality. Its hazard function is given by
+
+$$
+h(x) = a(x+c)^{-p}e^{-bx},
+$$
+
+with corresponding survival function
+
+$$
+S_\text{PE}(x) = e^{ab^{p-1}e^{bc}(\Gamma[1 - p, b (c + x)]-\Gamma[1-p, bc])},
+$$
+
+The family contains many of the distributions that have previously been used in the survival analysis of infant mortality (Figure \@ref(fig:power-exponential-family)).
+
+```{r power-exponential-family, fig.cap='The power-exponential hazard family of probability distributions generalizes many distributions commonly used to model infant mortality and permits multiple frailty interpretations.'}
+knitr::include_graphics('fig/power-exponential-family.pdf')
+```
+
+Testing the power-exponential hazard across a range of populations, I find strong evidence for the exponential tail behavior (Figure \@ref(power-exponential-maternal-strata)). Such a pattern is consistent with the hypothesis of mortality selection under acquired robustness on the individual level: While mortality rates for each individual decline exponentially over time due to the continuous adaptation of the organisms to the extrauterine environment, the *level* of mortality varies proportionally between individuals according to some "frailty" distribution. Thus, the initial power-law decline in the risk of death shortly after birth is a population-level phenomenon induced by the early death of extremely frail newborns, while the effect of acquired robustness on the individual level can be seen in the more homogeneous population of infants that survived into the postneonatal period. Simply put, the steeper the mortality decline over the first few days of life as measured by the power parameter $p$, the more heterogeneous the population of infants is at birth.
+
+```{r power-exponential-maternal-strata, fig.cap='Patterns of ontogenescence are well described by the power-exponential family of probability distributions.'}
+knitr::include_graphics('fig/power-exponential-maternal-strata.pdf')
+```
+
+Under such a frailty interpretation, most of the observed cohort level mortality decline over infancy is due to mortality selection. While the hazard of death for the 2005--2009 cohort of newborns in the U.S. drops by a factor of more than 10,000 over the first year of life, individual members of the cohort are only expected to experience a decline in mortality by a factor of 4.3 over the same period. Such a high degree of mortality selection would necessitate an extremely skewed frailty distribution. But what could this distribution be?
+
+The power-exponential hazard is closely related to the so-called Hougaard-Gompertz frailty model,  a multiplicative frailty model with an extremely flexible mixing distribution that smoothly interpolates among the Gamma, the inverse Gaussian and the positive-stable (in increasing order of positive skewness). Both the power-exponential hazard model and the Hougaard-Gompertz model fit the data equally well and lead to similar conclusions regarding the role of mortality selection.
+
+However, mortality selection is not the only "origin story" of the power-exponential hazard. Another possible interpretation is that of the rate function of a non-homogeneous thinned Poisson process where each infant upon birth is subjected to "shocks" to their health arriving with rate $\lambda(x)$, each shock leading to death with a probability $p(x)$. In such a model, the shocks would plausibly be associated with the event of birth, and thus the corresponding arrival rate is expected to fall off quickly over the first few days of life -- as modeled with the power-law term -- whereas the probability of a shock leading to death depends on the maturity of the infant and declines more gradually with age -- as modeled with the rather slow exponential decline. Under this interpretation, the power-exponential hazard connects directly to the transitional timing and the acquired robustness hypotheses of ontogenescence.
+
+With the power-exponential hazard, I have proposed a family of probability distributions that
+  
+  1. exhibits a close and parsimonious fit to the observed age trajectory of infant mortality in the current-day U.S. across a range of sub-populations,
+  2. can be fit within the extremely well-developed apparatus of Generalized Linear Models,
+  3. generalizes a wide range of probability distributions commonly used to fit infant mortality,
+  4. features parameters with a clear phenomenological interpretation (e.g., the hazard of death around birth, the hazard's elasticity around birth, the rate of postneonatal mortality decline), and
+  5. can be interpreted as either a frailty model or a shock model with a corresponding change in the meaning of the parameters.
+
+The last point is crucial concerning any investigation into ontogenescence: Quite different assumptions about the process giving rise to the hazard of death can lead to statistically indistinguishable lifetime distributions. While this indeterminacy has long been realized in the context of modeling old-age mortality [@Beard1959; @Yashin1994], I demonstrated that the very same problem applies to the study of ontogenescence and its central concepts of mortality selection, acquired robustness and the timing of transitional shocks. 
+
+Thus, deciding which process actually gives rise to the remarkably regular and simple pattern of ontogenescence requires different inference strategies. This realization is the origin of papers two and three of this thesis, the former facing the mortality selection hypothesis head-on by estimating the observed distribution of risk in a population of newborns and the latter addressing the transitional timing hypothesis by looking what "mark" the event of birth leaves on a cohort as they transition into life.
+
+## Paper 2: The impact of population heterogeneity on the age trajectory of neonatal mortality
+
+How much of the observed population-level decline in the hazard of death throughout the first month of life arises from individual-level ontogenescence, and how much is due to population heterogeneity? The answer to this question directly addresses the *mortality selection* hypothesis of ontogenesis, and it requires some knowledge about the individuals in a population.
+
+The hazard of death for an individual at some point in time is always a latent variable, as it can not be measured directly. A person is either alive or dead, and the risk to move from one state to the other must be estimated via some model. One ingenious approach to this modeling problem is to assume some functional form for the individual level hazard trajectory and some family of distributions for the distribution of risks between individuals and then, putting the strong assumptions to work, infer the most likely individual level hazard trajectory from the observed distribution of lifetimes in a cohort. These frailty models allow maximum inference from minimal data via a multitude of assumptions, which has lead to some skepticism regarding their usefulness regarding the test of hypothesis involving population heterogeneity:
+
+> *"Individual random effects (frailties), whenever detected, can be made to disappear by elementary model transformation. In consequence, unless we are to take some model form as unassailable, beyond challenge and carved in stone, and if we are to understand the term 'frailty' as referring to individual random effects, then frailty models have no value."* [@OQuigley2002]
+
+> *"The statistician who chooses $S(t|X, Z)$ will conclude that heterogeneity is clearly evident. The statistician who decides for $S(t|X)$ will come to the opposite conclusion."* [@Wienke2011]
+
+To circumvent the identifiability issues, I turn the frailty modeling framework on its head: Instead of asking how much unobserved heterogeneity would be needed to produce an observed population hazard, I ask how much of the curvature of the observed population hazard is explained by the heterogeneity we can actually observe in the population.
+
+Observable characteristics of a neonate's "frailty" are the Apgar score, the birthweight, and the gestation at birth. For each of the 252 population strata defined by the intersection of the three frailty dimensions, I estimate the heterogeneity in level and shape of ontogenescence.
+
+```{r neonatal-hazard-trajectories, fig.cap='Estimated neonatal hazard trajectories for the 2008--2012 U.S. birth cohort by condition upon birth.'}
+knitr::include_graphics('fig/neonatal-hazard-trajectories.pdf')
+```
+
+As shown in Figure \@ref(fig:neonatal-hazard-trajectories), the variation in the risk of death is substantial between strata, with the hazard rates at birth stretching across more than five orders of magnitude. Most of the newborns, however, are part of a stratum with a nearly flat mortality trajectory. Thus, the cohort-level pattern of ontogenescence does not reflect the reality for the majority of the cohort's members. Early in life, the distribution of hazards is indeed so skewed, that the average loses any meaning as a measure of centrality: Upon birth, 98 percent of infants are part of a stratum with below-average mortality. Over the next 27 days of life, the risk distribution compresses somewhat but remains positively skewed (Figure \@ref(fig:distribution-of-risk)B).
+
+I find a near-perfect log-linear correlation between the average risk of death and the between stratum mortality variance (Figure \@ref(fig:distribution-of-risk)A). Such a correlation is characteristic for the family of Hougaard probability distributions, which, in paper one, I suggested as the basis for a frailty model for infant mortality.
+
+```{r distribution-of-risk, fig.cap='Mean-variance relationship over day-of-age (A) and distribution function (B) of the mortality/hazard rates in the 2008--2012 U.S. birth cohort across observed frailty strata. The points in (A) mark mean and variance of the life table mortality rates, whereas the smooth line is predicted from a model fit to stratum specific mortality. In plot (B), the gray lines refer to the life table estimates and the black lines to the model predictions.'}
+knitr::include_graphics('fig/distribution-of-risk.pdf')
+```
+
+Perhaps surprisingly, the data at hand does not support the *mortality selection* hypothesis for ontogenescence. As shown by extensive analysis of the 252 population strata, mortality selection neither explains the day-to-day change in life table mortality rates, nor the slope of the population hazard trajectory, nor the compression of the distribution of mortality over age, nor the convergence between average mortality low frailty mortality. While selective dropout plays some role in all of these phenomena, they are mostly explained by converging stratum-specific mortality and hazard rates over the neonatal period.
+
+## Paper 3: The gestational age pattern of feto-infant mortality
+
+Given the lack of evidence for the mortality selection hypothesis of ontogenescence, I turn my attention towards the role of the birth transition. As any transition divides time into "before" and "after," it seems ignorant only to consider mortality *following* birth, so instead, I investigate "the gestational age pattern of feto-infant mortality."
+
+The decline in the risk of death does not start with birth. In fact, by the time a child is born, the risk of death may be orders of magnitude smaller than the hazard shortly after conception. Consequently, @Levitis2011 defines ontogenescence as *"a population-level phenomenon in which the death rate of each cohort tends to decrease with increasing age between conception and maturity."*
+
+```{r gestational-age-pattern, fig.cap='The feto-infant mortality trajectory over gestational age for a U.S. cohort of fetuses conceived in 2009, surviving until fetal viability and followed over the next 52 weeks. The risk of feto-infant death among the survivors of the cohort declines exponentially over age interrupted only by a "birth hump."'}
+knitr::include_graphics('fig/gestational-age-pattern.pdf')
+```
+
+Discussing the *transitional timing hypothesis* @Levitis2011 argues that physiological, environmental, and genetic transitions bring about a momentary increase in the risk of death as the organism adapts to the new situation. While he proceeds to focus on the timing of genetic transcriptions, a much more visible transition is that of birth.
+
+How does the risk of death evolve in a cohort of fetuses transitioning into infancy?
+
+Using U.S. data on fetuses conceived in 2009, I found that the transition of birth leaves a mark in the form of a "birth hump" on an otherwise exponentially declining gestational age trajectory of feto-infant mortality (Figure \@ref(fig:gestational-age-pattern)). By performing a decomposition analysis, I show how the distinct mortality pattern arises from an interplay of
+
+1. U-shaped mortality among the fetal population,
+2. the lessening burden of prematurity with advancing age at delivery,
+3. the changing likelihood of live birth over the length of a pregnancy, and
+4. the sudden decline in mortality in the days following birth.
+
+As a summary measure of feto-infant mortality over gestational age, I propose the probability of a fetus alive at week 24 to die within the next year. While the incidence of adverse pregnancy outcomes as measured by this indicator has fallen from 1989 to 1999, and again to 2009, any lower limit is far away: out of 100,000 fetuses of African-American origin, one in 71--75 die within one year of fetal viability, roughly twice as many as observed in cohorts of Hispanic or White origin (Figure \@ref(fig:perinatal-hazards)C). Pronounced differences in the magnitude of the "birth hump," as it turns out, have only a minor effect on the probability of post-viability survival.
+
+As an indicator of adverse pregnancy outcomes, the probability of death within a year following fetal viability is quite sensitive and, unlike the well-known perinatal mortality rate, embedded in a survival analysis framework. As concluded in paper 3:
+
+> "Would pregnancy come with the same warnings as prescription drugs, feto-infant death past the age of fetal viability would have to be labeled as a 'common' side effect according to the standards put forth in @CIOMSWGIIIV1999."
+
+```{r perinatal-hazards, fig.cap='Age trajectories of feto-infant survival A) by sex for the U.S. conception cohort 2009, B) by U.S. conception cohort, C) by maternal origin for the U.S. conception cohort 2009. Fitted (lines) versus life table estimates (points).'}
+knitr::include_graphics('fig/perinatal-hazards.pdf')
+```
+
+\clearpage
+
+# Conclusion
+
+The *demography of ontogenescence* presented in the preceding chapters is heavily inspired by the Vaupelian approach to the study of senescence. A central tenet of this school is the inquiry into simple mechanisms that can give rise to universally observed age patterns of mortality. I have shown that the mechanistic models which have been proposed for the study of mortality trajectories in old age -- exponentially changing individual-level resilience towards death under mortality selection or varying rates of insults -- also provide a close fit to infant life tables and lead to defendable, if somewhat simplistic, interpretations for ontogenescence.
+
+Sir David Cox, when prompted by a reviewer to give a mechanistic explanation for his now eponymous survival model, cautions the reader against searching for physical processes in the mathematical formulation of survival models as *"The wide variety of possibilities serves to emphasize the difficulty of inferring an underlying mechanism indirectly from failure times alone rather than from direct study of the controlling physical processes"* [@Cox1972].
+
+That different models describe the same phenomenon equally well is neither surprising nor in itself a problem but rather the starting point of empirical research. However, the constructs used in mechanistic formulations for the age trajectory of mortality have proved to be hard to operationalize: How do, e.g., individual-level hazards, frailty, and not further specified shocks to vitality connect to the world of observables? 
+
+The operalization of the "frailty" concept in the context of ontogenescence among humans is a major contribution of this thesis. Separating a birth cohort of infants into hundreds of frailty levels based upon the condition at delivery allowed me to make progress on the initially posed question: "What drives ontogenescence?"
+
+Despite decades of speculation to the contrary, mortality selection seems to play little role in explaining ontogenescence. As stated in the second paper:
+
+> "The average age trajectory of neonatal mortality is highly influenced by a small group of frail newborns and does not reflect the rather flat age effect estimated for the healthy majority of the birth cohort. While the risk decline over the first day of life is substantially influenced by mortality selection, the overall age trajectory is better explained by the convergence of high-risk towards low-risk population strata."
+
+In the introduction, I noted that physiological changes of the infant, i.e., *acquired robustness*, is an implausible explanation for the drastic change in the risk of death over the first few days of life. However, for the majority of the birth cohort -- those born without complications -- this drastic change is not observed. Instead, the hazard of death almost immediately after birth settles into a log-linear decline of less than one percent per day of age, a rate that is comparable to ongoing physiological development. Future research into the *acquired robustness* hypothesis thus may start with an inquiry into ontogenescence among the subset of those born healthy.
+
+By tracing ontogenescence across the feto-infant gap, I contribute the phenomenon of a "birth hump" to the literature, which has implications for Levitis *transitional timing* hypothesis. As summarised by @Levitis2011 *"transcriptional, developmental and environmental transitions are dangerous, and these are concentrated early in life,"* thus cohort mortality should initially decline. The "birth hump," however, is the existence proof for a transition that causes the average hazard for a cohort to increase. Further development of the *transitional timing* hypothesis may, therefore, distinguish between well-delineated physiological stages in the life-cycle of a developing organism, where each stage transition is expected to be accompanied by a "hump" shaped increase in cohort level mortality, and transitions which exhibit a monotonically declining incidence over time, such as the genetic mechanisms discussed by Levitis.
+
+Hundreds of hypotheses on the origin of senescence are listed in @Medvedev1990. I doubt that future progress on the mirror phenomenon of ontogenescence will come from the construction of a similarly elaborate web of ideas. A better approach may be to confront a few broad explanations with a wide array of data. @Levitis2011 formulated five general hypotheses. Three have been considered in this thesis, one of which has been rejected on empirical grounds. Four more to go...
+
+\clearpage
+
+# References
