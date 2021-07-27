@@ -731,10 +731,10 @@ The second term can be manipulated to yield
 $$
 \begin{aligned}
   \sum_k h(x|k)\mathrm{P}'(k|X>x) &=
-  \sum_k h(x|k) \left[
+  \sum_k h(x|k) \left(
       \frac {\mathrm{P}(k)S'(x|k)} {S(x)} -
       \frac {\mathrm{P}(k)S'(x)S(x|k)} {S(x)^2}
-    \right]' \\
+    \right) \\
   &=
   \sum_k \frac {h(x|k)\mathrm{P}(k)S'(x|k)} {S(x)} -
   \sum_k \frac {h(x|k)\mathrm{P}(k)S'(x)S(x|k)} {S(x)^2}  \\
